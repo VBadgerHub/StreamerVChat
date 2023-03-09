@@ -1,6 +1,0 @@
-2023.03.09 17:15:33 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":"TEST POSTMAN","text":1} MSG: Wrong object property value type
-2023.03.09 17:43:42 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":true,"text":1} MSG: Wrong object property value type
-2023.03.09 17:46:19 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":"true","text":"test"} MSG: Cannot read properties of undefined (reading 'create')
-2023.03.09 17:47:37 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":"true","text":"test"} MSG: Cannot read properties of undefined (reading 'create')
-2023.03.09 17:49:20 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":"true","text":"test"} MSG: Cannot read properties of undefined (reading 'create')
-2023.03.09 17:50:59 error Mail Error: {"from":"Vticketsender@outlook.com","to":"vorczu89@gmail.com","subject":"true","text":"test"} MSG: Cannot read properties of undefined (reading 'create')
