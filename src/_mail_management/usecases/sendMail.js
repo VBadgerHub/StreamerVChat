@@ -32,14 +32,18 @@ export const sendMail = async (mailOptions  ) =>{
     try {
         let res = await mailer.sendMail(mailToSend);        
         if (res) { 
-            await mailRepository.add(mailToSend, {info: res.messageId, error: null}) 
+            let dbRes = await mailRepository.add(mailToSend, {info: res.messageId, error: null}).catch(error => {
+                return true
+            }) 
+            if (dbRes) {
+                return {code: 500, msg: 'DB Error'}
+            }
         }
         mailLogger.info(`Mail Send: ${JSON.stringify(mailToSend)} ID: ${res.messageId}`)
         return {code: 200, msg: 'Mail sent'}
 
-    } catch (error) {
-        
-        let message = 'Unknown Error'
+    } catch (error) {    
+        let message = 'Unknown Error'  
         if (error instanceof Error) message = error.message     
         mailLogger.error(`Mail Error: ${JSON.stringify(mailToSend)} MSG: ${message}`)
         await mailRepository.add(mailToSend, {info: null, error: message})
