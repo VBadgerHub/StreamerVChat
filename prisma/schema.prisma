@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(50)
+  twitch        String    @db.VarChar(50)
+  mail          String    @db.VarChar(50)
+  date_of_birth DateTime  @db.DateTime
+}
+
+model mail {
+  id          Int       @id @default(autoincrement())
+  from        String    @db.VarChar(50)
+  to          String    @db.VarChar(50)
+  subject     String    @db.VarChar(50)
+  text        String    @db.VarChar(255)
+  created_at  DateTime  @db.DateTime
+  info        String?   @db.VarChar(255)
+  error       String?   @db.VarChar(255)
+}
