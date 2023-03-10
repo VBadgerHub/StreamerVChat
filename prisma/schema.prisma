@@ -13,9 +13,18 @@ datasource db {
 model user {
   id            Int       @id @default(autoincrement())
   name          String    @db.VarChar(50)
-  twitch        String    @db.VarChar(50)
+  password      String    @db.VarChar(50)
   mail          String    @db.VarChar(50)
   date_of_birth DateTime  @db.DateTime
+  is_active     Boolean   @default(true)
+  is_mail_auth  Boolean   @default(false)
+  is_locked     Boolean   @default(false)
+}
+
+model account {
+  id              Int       @id @default(autoincrement())
+  twitch          String    @db.VarChar(50)
+  register_date   DateTime  @db.DateTime
 }
 
 model mail {
@@ -27,4 +36,10 @@ model mail {
   created_at  DateTime  @db.DateTime
   info        String?   @db.VarChar(255)
   error       String?   @db.VarChar(255)
+}
+
+model loginLogs {
+  id            Int       @id @default(autoincrement())
+  date          DateTime    @db.DateTime
+  acc_name       String    @db.VarChar(50)
 }
