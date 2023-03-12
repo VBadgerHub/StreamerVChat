@@ -1,7 +1,8 @@
 node_modules
-/prisma/migrations
-/logs
+.prisma/migrations
+logs
 .env
 logs 
 coverage
+
 
