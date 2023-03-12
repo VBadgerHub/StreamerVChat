@@ -10,4 +10,5 @@ export const MAIL_PASS = process.env.MAIL_PASS;
 export const MAIL_PORT = process.env.MAIL_PORT;
 export const MAIL_HOST = process.env.MAIL_HOST;
 export const MAIL_SECURE = process.env.MAIL_SECURE;
+export const MAIL_SENDER_ON = process.env.MAIL_SENDER_ON;
 

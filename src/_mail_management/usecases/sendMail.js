@@ -1,7 +1,8 @@
 import { mailer } from "../../gateways/mailer_gateway.js";
 import mailRepository from "../../repositories/mailRepository.js";
+import optionsRepository from "../../repositories/optionsRepository.js";
 import { mailLogger } from "../../utils/logger.js";
-import { MAIL_USER, MAIL_TARGET } from "../../utils/envConfigLoader.js";
+import { MAIL_USER, MAIL_TARGET, MAIL_SENDER_ON } from "../../utils/envConfigLoader.js";
 
 const mailCompose = (mailData) =>{
     const mail = {
@@ -15,7 +16,6 @@ const mailCompose = (mailData) =>{
 }
 
 export const sendMail = async (mailOptions  ) =>{ 
-
     if (Object.keys(mailOptions).length < 1) {
         return {code: 400, msg: 'Empty or badly formatted object'}
     }
@@ -30,12 +30,24 @@ export const sendMail = async (mailOptions  ) =>{
     }
 
     try {
-        let res = await mailer.sendMail(mailToSend);        
+
+        let res;
+        let isMailerOn = await optionsRepository.getByName('IsMailerOn')
+
+        if(isMailerOn.option_value == 1){
+             res = await mailer.sendMail(mailToSend);      
+        } else {
+            res = {messageId: 'NOT SENT - MAILER IS OFF'}
+            mailLogger.error(`Mail Error: ${JSON.stringify(mailToSend)} MSG: NOT SENT - MAILER IS OFF`)
+            return {code: 500, msg: 'Mail not sent'}
+        }
+
         if (res) { 
             let dbRes = await mailRepository.add(mailToSend, {info: res.messageId, error: null}).catch(error => {
                 return true
             }) 
             if (dbRes) {
+                mailLogger.error(`Mail Error: ${JSON.stringify(mailToSend)} MSG: DB conn error`)
                 return {code: 500, msg: 'DB Error'}
             }
         }
