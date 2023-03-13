@@ -1,29 +1,38 @@
+import jwt  from "jsonwebtoken"
+import { USER_SECRET } from "../../utils/envConfigLoader.js";
 import userRepository from "../../repositories/userRepository.js";
-
+import optionsRepository from "../../repositories/optionsRepository.js";
+import { passwordHash } from "../../utils/bcrypt.js";
 
 
 export const registerUser = async (user) =>{
 
     const userValidate = isUserValid(user)
     if (!userValidate.result) {
-        return { code: 400, msg: userValidate.msgArr} 
+        const respData = { msg: userValidate.msgArr, data: user}
+        return { code: 400, respData} 
     }
  
     try { 
-        const responseUser = await userRepository.add(user)
-        return { code: 200, msg: 'User registered successfully', data: responseUser}
+        const responseUser = await userRepository.add(await passwordHash(user))
+        const userSessionTime = await optionsRepository.getByName('UserSessionTime')
+        const generateToken = jwt.sign({user: 'mailer'}, USER_SECRET, {expiresIn: userSessionTime.option_value})
+        const respData = { msg: 'User registered successfully', data: userDTO(responseUser)}
+        
+        return { code: 200, respData, jwt: generateToken}
+
     } catch (error) {
         if (error.code == 'P2002') {
             if (error.meta.target == 'users_mail_key') {
-                return { code: 400, msg: 'Mail already used'}                
+                const respData = { msg: 'Mail already used', data: []}
+                return { code: 400, respData}                
             }
         }
+        console.log(error);
         return { code: 500, msg: 'Unknow Error'} 
     }
 
 }
-
-
 
 const isUserValid = (user) =>{
 
@@ -72,9 +81,10 @@ const isEmailValid = (mail) =>{
     return regex.test(mail) ? { result: true } : { result: false, msg: 'Mail is not valid' }
 }
 
-const isUserObjectValid = () => {
-
+const userDTO = (user) => {
+    return {
+        id: user.id,
+        name: user.name,
+        mail: user.mail
+    }
 }
-
-// !user                                   ||
-// Object.keys(user).length < 1            ||

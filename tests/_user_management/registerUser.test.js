@@ -21,9 +21,10 @@ describe('Register new user tests', () => {
 
     it('registerUser() [Valid object]', async () => {
         const res = await registerUser(userData.valid);
-        expect(res.msg).contain('User registered successfully')
         expect(res.code).toBe(200)
-        expect(res.data.name).toBe('Tester')
+        expect(res.respData.msg).contain('User registered successfully')
+        expect(res.respData.data.name).toBe('Tester')
+        expect(res.respData.data.mail).toBe('test@mail.vorczu.pl')
     })
 
     it('registerUser() [Not valid name data]', async () => {
@@ -35,7 +36,7 @@ describe('Register new user tests', () => {
                 date_of_birth: new Date()
             });
             expect(res.code).toBe(400)
-            expect(res.msg).contain('Name is not valid')
+            expect(res.respData.msg).contain('Name is not valid')
         }   
     });
 
@@ -49,7 +50,7 @@ describe('Register new user tests', () => {
                 date_of_birth: new Date()
             });
             expect(res.code).toBe(400)
-            expect(res.msg).contain('Password is not valid')
+            expect(res.respData.msg).contain('Password is not valid')
         }   
     });
 
@@ -63,31 +64,28 @@ describe('Register new user tests', () => {
                 date_of_birth: new Date() 
             });
             expect(res.code).toBe(400)
-            expect(res.msg).contain('Mail is not valid')
+            expect(res.respData.msg).contain('Mail is not valid')
         }   
     });
 
     it('registerUser() [Empty user obj]', async () => {
         const res = await registerUser({});
         expect(res.code).toBe(400)
-        expect(res.msg.includes('Not valid user object'))
+        expect(res.respData.msg.includes('Not valid user object'))
     });
 
     it('registerUser() [Not unique mail]', async () => {
         await userRepository.add(userData.valid)
         const res = await registerUser(userData.valid);
         expect(res.code).toBe(400)
-        expect(res.msg).contain('Mail already used')
+        expect(res.respData.msg).contain('Mail already used')
     });
     
     it('registerUser() [JWT sent]', async () => {
-        
+        const res = await registerUser(userData.valid);
+        expect(res.respData.msg).contain('User registered successfully')
+        expect(res.jwt) 
     });
-
-    it('registerUser() [PW hashed]', async () => {
-
-    });
-
 
 })
 
