@@ -1,5 +1,6 @@
+import jwt  from "jsonwebtoken"
+import { USER_SECRET } from "../../utils/envConfigLoader.js";
 import userRepository from "../../repositories/userRepository.js";
-
 
 
 export const registerUser = async (user) =>{
@@ -11,7 +12,9 @@ export const registerUser = async (user) =>{
  
     try { 
         const responseUser = await userRepository.add(user)
-        return { code: 200, msg: 'User registered successfully', data: responseUser}
+        const generateToken = jwt.sign({user: 'mailer'}, USER_SECRET, {expiresIn: '30s'})
+        
+        return { code: 200, msg: 'User registered successfully', data: userDTO(responseUser), jwt: generateToken}
     } catch (error) {
         if (error.code == 'P2002') {
             if (error.meta.target == 'users_mail_key') {
@@ -72,9 +75,10 @@ const isEmailValid = (mail) =>{
     return regex.test(mail) ? { result: true } : { result: false, msg: 'Mail is not valid' }
 }
 
-const isUserObjectValid = () => {
-
+const userDTO = (user) => {
+    return {
+        id: user.id,
+        name: user.name,
+        mail: user.mail
+    }
 }
-
-// !user                                   ||
-// Object.keys(user).length < 1            ||
