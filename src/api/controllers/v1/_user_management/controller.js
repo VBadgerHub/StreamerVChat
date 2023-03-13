@@ -7,7 +7,7 @@ const createUser = async (req, res) =>{
             httpOnly: true
         }
     )        
-    res.status(response.code).send(response.data)
+    res.status(response.code).send(response.respData)
 }
 
 const userLogout = async (req, res) => {

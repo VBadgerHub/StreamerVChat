@@ -1,6 +1,18 @@
 import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
+const add = async (optionData) =>{
+    return await prisma.options.create({
+        data: {
+            option_name : optionData.name,
+            option_description : optionData.desc,
+            option_value : optionData.value,
+            change_date : null,
+            change_by : null
+        }
+    }) 
+}
+
 const getByName = async (optionName) =>{
     return await prisma.options.findFirst({
         where: {
@@ -32,6 +44,7 @@ const updateOptionById = async (id, newValue, changer) =>{
 
 export default 
 { 
+    add,
     getByName,
     getById,
     updateOptionById,
