@@ -3,6 +3,7 @@ import swaggerDoc from 'swagger-ui-express'
 import { API_ROUTE, PORT } from '../utils/envConfigLoader.js';
 import allAppRoutes from './controllers/index.js'
 import {swaggerDocumentation} from '../utils/swagger.js'
+import optionsRepository from '../repositories/optionsRepository.js';
 
 
 
@@ -19,6 +20,8 @@ app.listen(PORT, () => {
   console.log(`🔥 [server]: Server działa na porcie ${PORT}`);
   
 }); 
+
+
 
 export default app
 
