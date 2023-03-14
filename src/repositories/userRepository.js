@@ -7,28 +7,29 @@ const add = async (user) =>{
         data: {
             ...user,
             date_of_birth: new Date(user.date_of_birth),
-            create_date: new Date()
-            // is_active     
-            // is_mail_auth  
-            // is_locked     
+            create_date: new Date()  
         }
     })
 }
 
-const getByName = async (optionName) =>{
+const getByName = async (name) =>{
     return await prisma.users.findFirst({
         where: {
-            option_name: optionName
+            name: name
         }
     })
 }
 
-const getById = async (optionId) =>{
+const getById = async (id) =>{
     return await prisma.users.findFirst({
         where: {
-            id: optionId
+            id: id
         }
     })
+}
+
+const getAll = async () =>{
+    return await prisma.users.findMany()
 }
 
 const deleteAll = async () =>{
@@ -36,24 +37,11 @@ const deleteAll = async () =>{
 
 }
 
-const updateOptionById = async (id, newValue, changer) =>{
-    return await prisma.users.update({
-        where: {
-            id: id
-        },
-        data : {
-            change_date: new Date(),
-            change_by: changer,
-            option_value: newValue
-        }
-    })
-}
-
 export default 
 { 
     add,
     getByName,
     getById,
-    updateOptionById,
+    getAll,
     deleteAll,
 } 

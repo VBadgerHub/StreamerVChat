@@ -1,6 +1,8 @@
-import { registerUser } from "../../../../_user_management/usecases/index.js"
+import {registerUser} from '../../../../_user_management/usecases/index.js'
 
-const createUser = async (req, res) =>{  
+import { getById, getByName, getAllData } from '../../../../_user_management/queries/index.js'
+
+const add = async (req, res) =>{  
     const response = await registerUser(req.body) 
     res.cookie(
         "token", response.jwt, {
@@ -8,14 +10,33 @@ const createUser = async (req, res) =>{
         }
     )        
     res.status(response.code).send(response.respData)
+} 
+
+const getUserById = async (req, res) =>{  
+    const response = await getById(req.params.id)       
+    res.status(response.code).send(response.respData)
 }
 
-const userLogout = async (req, res) => {
-    res.clearCookie('token')
-    res.sendStatus(302)
+const getUserByName = async (req, res) =>{  
+    const response = await getByName(req.params.name)       
+    res.status(response.code).send(response.data)
+} 
+
+const getallUsers = async (req, res) =>{  
+    const response = await getAllData()  
+ 
+   
+
+    if (response.code == 200) {
+        res.json(userDTO)
+    }      
+    res.status(response.code)
 }
+
 
 export default { 
-    userLogout,
-    createUser
+    getUserById, 
+    getUserByName,
+    getallUsers,
+    add
 } 
