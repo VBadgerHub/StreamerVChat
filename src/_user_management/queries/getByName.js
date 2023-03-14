@@ -1,5 +1,6 @@
 import userRepository from "../../repositories/userRepository.js"
 
 export const getByName = async (name) =>{
-    return await userRepository.getById(id)
+    let res = await userRepository.getByName(name)
+    return {code: 200, data: res}
 }

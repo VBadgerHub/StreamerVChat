@@ -10,26 +10,32 @@ const add = async (req, res) =>{
         }
     )        
     res.status(response.code).send(response.respData)
-}
+} 
 
 const getUserById = async (req, res) =>{  
-    const response = await getById(req.params.id)      
+    const response = await getById(req.params.id)       
     res.status(response.code).send(response.respData)
 }
 
 const getUserByName = async (req, res) =>{  
     const response = await getByName(req.params.name)       
-    res.status(response.code).send(response.respData)
-}
+    res.status(response.code).send(response.data)
+} 
 
 const getallUsers = async (req, res) =>{  
-    const response = await getAllData()        
-    res.status(response.code).send(response.respData)
+    const response = await getAllData()  
+ 
+   
+
+    if (response.code == 200) {
+        res.json(userDTO)
+    }      
+    res.status(response.code)
 }
 
 
 export default { 
-    getUserById,
+    getUserById, 
     getUserByName,
     getallUsers,
     add
