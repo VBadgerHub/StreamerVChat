@@ -11,9 +11,12 @@
   "author": "Vorczu",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
     "babel-jest": "^29.5.0",
     "jest": "^29.5.0",
     "jest-cli": "^29.5.0",
+    "jest-extended": "^3.2.4",
     "prisma": "^4.11.0"
   },
   "dependencies": {
