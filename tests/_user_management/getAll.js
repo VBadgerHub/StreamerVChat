@@ -1,5 +1,4 @@
 import { getAllData } from '../../src/_user_management/queries/getAll.js'
-import { beforeEach, describe, expect, it, assert } from 'vitest'
 import userRepository from '../../src/repositories/userRepository.js'
 describe('Register new user tests', () => {
     const usersData = [
@@ -29,15 +28,10 @@ describe('Register new user tests', () => {
         }
     ]
 
-    beforeEach(async () => {
-        await userRepository.deleteAll()
-    });
 
 
     it('getAll() [Get all users]', async () => {
-        usersData.forEach(async user => {
-            await userRepository.add(user)  
-        });
+
         const res = await getAllData();
         expect(res.code).toBe(200)
         expect(res.data.includes([
@@ -60,18 +54,25 @@ describe('Register new user tests', () => {
     })
     
     it('getAll() [Get all users - no users in DB', async () => {
+        await userRepository.deleteAll()
         const res = await getAllData();
         expect(res.code).toBe(200)
         assert.deepEqual(res.data, [])
     })
 
     it('getAll() [Get all users - only DTO]', async () => {
-        let response = await userRepository.add(usersData[0])  
-        let userToCompare = {
-            id: response.id,
-            name: response.name,
-            mail: response.mail
+        let response
+        let userToCompare
+        let deleteResponse = await userRepository.deleteAll()
+        if (deleteResponse) {
+            response = await userRepository.add(usersData[0])  
+            userToCompare = {
+                id: response.id,
+                name: response.name,
+                mail: response.mail
+            }
         }
+        
         const res = await getAllData();
         expect(res.code).toBe(200)
         assert.deepEqual(res.data[0], userToCompare)
